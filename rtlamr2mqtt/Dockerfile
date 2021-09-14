@@ -12,16 +12,16 @@ RUN apk add --no-cache --virtual build-deps alpine-sdk cmake git go libc-dev lib
     cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr/local; \
     make; \
     make install; \
+    git clone --single-branch git://github.com/shaunhey/ea_receiver /usr/local/ea_receiver; \
+    cd /usr/local/ea_receiver; \
+    make install ;\    
     mkdir -vp /tmp/go; \
     export GOPATH=/tmp/go; \
     go get -v github.com/bemasher/rtlamr; \
     cp /tmp/go/bin/* /usr/local/bin/; \
     apk del build-deps; \
     rm -rf /tmp/src /tmp/go /usr/lib/go; \
-    apk add --no-cache libusb mosquitto-clients; \
-    git clone --single-branch git://github.com/shaunhey/ea_receiver /usr/local/ea_receiver; \
-    cd /usr/local/ea_receiver; \
-    make install
+    apk add --no-cache libusb mosquitto-clients
 
 RUN echo "blacklist dvb_usb_rtl28xxu" >> /etc/modprobe.d/rtlsdr-blacklist.conf
 
